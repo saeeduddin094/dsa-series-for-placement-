@@ -1,0 +1,24 @@
+void solve(BinaryTreeNode<int>* root,vector<int> &v)
+{
+    if(root==NULL)
+    {
+        return ;
+    }
+    solve(root->left,v);
+    v.push_back(root->data);
+    solve(root->right,v);
+}
+BinaryTreeNode<int>* BTtoDLL(BinaryTreeNode<int>* root) {
+   vector<int> v;
+   solve(root,v);
+   BinaryTreeNode<int>* head=new BinaryTreeNode<int>(v[0]);
+   BinaryTreeNode<int>* temp=head;
+   for(int i=1;i<v.size();i++)
+   {
+        BinaryTreeNode<int>* node=new BinaryTreeNode<int>(v[i]);
+        temp->right=node;
+        node->left=temp;
+        temp=temp->right;
+   }
+   return head;
+}
