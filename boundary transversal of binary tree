@@ -1,0 +1,64 @@
+void solve_left(TreeNode<int>* root,vector<int> &v)
+{
+    if(root==NULL)
+    {
+        return ;
+    }
+    if((root->left==NULL && root->right==NULL))
+    {
+        return ;
+    }
+    v.push_back(root->data);
+    if(root->left)
+    {
+        solve_left(root->left,v);
+    }
+    else
+    {
+        solve_left(root->right,v);
+    }
+}
+void solve_leaf(TreeNode<int>* root,vector<int> &v)
+{
+    if(root==NULL)
+    {
+        return ;
+    }
+    if(root->left==NULL && root->right==NULL)
+    {
+        v.push_back(root->data);
+    }
+    solve_leaf(root->left,v);
+    solve_leaf(root->right,v);
+
+}
+void solve_right(TreeNode<int>* root,vector<int> &v)
+{
+    if(root==NULL)
+    {
+        return ;
+    }
+    if( (root->left==NULL && root->right==NULL))
+    {
+        return ;
+    }
+    if(root->right)
+    {
+        solve_right(root->right,v);
+    }
+    else
+    {
+        solve_right(root->left,v);
+    }
+    v.push_back(root->data);
+}
+vector<int> traverseBoundary(TreeNode<int>* root){
+  vector<int> v;
+  // left
+  v.push_back(root->data);
+  solve_left(root->left,v);
+  if(root->left!=NULL  || root->right!=NULL)
+   solve_leaf(root,v);
+  solve_right(root->right,v); 
+  return v;    
+}
