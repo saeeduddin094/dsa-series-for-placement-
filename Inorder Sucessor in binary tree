@@ -1,0 +1,30 @@
+void solve(BinaryTreeNode<int> *root , BinaryTreeNode<int> *node  , bool &flag, BinaryTreeNode<int> *&ans)
+{
+    if(root==NULL)
+    {
+        return ;
+    }
+    solve(root->left,node,flag,ans);
+    if(flag)
+    {
+        flag=false;
+        // cout<<"first "<<root->data<<endl;
+        ans=root;
+        return; 
+    }
+    if(root==node && !flag)
+    {
+        flag=true;
+    }
+    solve(root->right,node,flag,ans);
+    return ;
+}
+BinaryTreeNode<int> *inorderSuccesor(BinaryTreeNode<int> *root, BinaryTreeNode<int> *node)
+{
+    bool flag=false;
+    BinaryTreeNode<int> *ans=NULL;
+    solve(root,node,flag,ans);
+    
+   
+    return ans;
+}
