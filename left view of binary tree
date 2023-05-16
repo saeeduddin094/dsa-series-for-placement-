@@ -1,0 +1,71 @@
+// LEVEL ORDER TRAVERSAL 
+#include<map>
+#include<vector>
+#include<queue>
+#include<algorithm>
+vector<int> getLeftView(TreeNode<int> *root)
+{
+     vector<int> ans; 
+     if(root==NULL)
+     {
+         return ans;
+     }
+    map<int,map<int,vector<int> > > m;// lvl,hd , nodes
+    queue< pair<TreeNode<int>* ,pair<int,int> > > q; // node // hd // level
+    q.push(make_pair(root,make_pair(0,0)));
+    
+    while(!q.empty())
+    {
+        TreeNode<int> *frontnode=q.front().first;
+        int hd=q.front().second.first;
+        int lvl=q.front().second.second;
+        m[lvl][hd].push_back(frontnode->data);
+        q.pop();
+        if(frontnode->left)
+        {
+             q.push(make_pair(frontnode->left,make_pair(hd-1,lvl+1)));
+        }
+        if(frontnode->right)
+        {
+             q.push(make_pair(frontnode->right,make_pair(hd+1,lvl+1)));
+        }
+    }
+    for(auto i : m)
+    {
+        for(auto j : i.second)
+        {
+            for(auto k : j.second )
+            {
+                   ans.push_back(k);
+                   break;
+            }
+            break;
+        }
+    }
+ 
+    return ans;
+}
+
+// RECURSIVE TRAVERSAL
+
+#include<vector>
+void solve(TreeNode<int> *root , vector<int> &v ,int lvl)
+{
+    if(root==NULL)
+    {
+        return ;
+    }
+    if(v.size()== lvl)
+    {
+        v.push_back(root->data);
+    }
+    solve(root->left,v,lvl+1);
+    solve(root->right,v,lvl+1);
+}
+vector<int> getLeftView(TreeNode<int> *root)
+{
+    vector<int> v;
+    int lvl=0;
+    solve(root,v,lvl);
+    return v;
+}
