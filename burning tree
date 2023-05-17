@@ -1,0 +1,77 @@
+    Node* parent_node(map <Node* , Node* > &parent,int target,Node* root)
+    {
+        Node *focus=NULL;
+        queue<Node* > q;
+        q.push(root);
+        parent[root]=NULL;
+        while(!q.empty())
+        {
+            Node* temp=q.front();
+            q.pop();
+            if(temp->data==target)
+            {
+                focus=temp;    
+            }
+            if(temp->left)
+            {
+                q.push(temp->left);
+                parent[temp->left]=temp;
+            }
+            if(temp->right)
+            {
+                q.push(temp->right);
+                parent[temp->right]=temp;
+            }
+            
+            
+        }
+        return focus;
+    }
+    void burn(Node* root,map <Node* , Node* > parent,int &ans)
+    {
+        map<Node*,bool> visited;
+        visited[root]=true;
+        queue< Node* >q;
+        q.push(root);
+        while(!q.empty()){
+            
+            // q.pop();
+            bool flag=false;
+            int size=q.size();
+            for(int i=0;i<size;i++)
+            {
+                Node* temp=q.front();
+                q.pop();
+                if(temp->left && visited[temp->left]!=true)
+                {
+                    visited[temp->left]=true;
+                    q.push(temp->left);
+                    flag=true;
+                }
+                if(temp->right && visited[temp->right]!=true)
+                {
+                    visited[temp->right]=true;
+                    q.push(temp->right);
+                    flag=true;
+                }
+                if(parent[temp]!=NULL && visited[parent[temp]]!=true)
+                {
+                    visited[parent[temp]]=true;
+                    q.push(parent[temp]);
+                    flag=true;
+                }
+            }
+            if(flag==true)
+            {
+                ans++;
+            }
+        }
+    }
+    int minTime(Node* root, int target) 
+    {
+        map <Node* , Node* > parent;
+        Node* target_node = parent_node(parent,target,root);
+        int ans=0;
+        burn(target_node,parent,ans);
+        return ans;
+    }
