@@ -1,0 +1,66 @@
+#include<queue>
+#include<utility>
+#include<climits>
+class Node
+{
+    public:
+    int data;
+    int col;
+    int row;
+    Node(int val,int r,int c)
+    {
+         data=val;
+         row=r;
+         col=c;
+    }
+};
+class compare
+{
+    public:
+    bool operator()(Node* a,Node* b)
+    {
+        return a->data > b->data;
+    }
+};
+int kSorted(vector<vector<int>> &a, int k, int n) {
+    int mini=INT_MAX;
+    int maxi=INT_MIN;
+    priority_queue<Node* ,vector<Node*> ,compare > pq;
+    for(int i=0;i<k;i++)
+    {
+        int ele=a[i][0];
+        maxi=max(maxi,ele);
+        mini=min(mini,ele);
+        pq.push(new Node(ele,i,0));
+    }
+    int first=mini;
+    int last=maxi;
+    while(!pq.empty())
+    {
+        Node* temp=pq.top();
+        pq.pop();
+        mini=temp->data;
+        
+        if(maxi-mini<last-first)
+        {
+            first=mini;
+            last=maxi;
+        }
+       
+        if(temp->col+1<n)
+        {
+            int x=temp->row;
+            int y=temp->col;
+            maxi=max(a[x][y+1],maxi);
+            pq.push(new Node(a[x][y+1],x,y+1));
+        }
+        else
+        {
+            break;
+        }
+
+    }
+    return last-first+1;
+
+}
+
